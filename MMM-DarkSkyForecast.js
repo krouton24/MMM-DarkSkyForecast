@@ -35,7 +35,7 @@ Module.register("MMM-DarkSkyForecast", {
     label_low: "L",
     label_timeFormat: "h a",
     label_days: ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"],
-    label_ordinals: ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"],
+    label_ordinals: ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"]
   },
 
   getScripts: function() {
@@ -167,6 +167,9 @@ Module.register("MMM-DarkSkyForecast", {
       return wrapper;
     }
 
+    // if (this.config.useAnimatedIcons) {
+    //   this.clearIcons();
+    // }
 
     //current conditions
     if (this.config.showCurrentConditions) {
@@ -204,25 +207,24 @@ Module.register("MMM-DarkSkyForecast", {
       var cTempContainer = document.createElement("span");
       cTempContainer.className = "today temperature-container";
 
-      //high temperature
-      var cHiTemp = document.createElement("span");
-      cHiTemp.className = "today high-temperature";
-      cHiTemp.innerHTML = (!this.config.concise ? this.config.label_high + " " : "") + Math.round(this.weatherData.daily.data[0].temperatureMax) + "°";
-      cTempContainer.appendChild(cHiTemp);
-
+      //low temperature
+      var cLoTemp = document.createElement("span");
+      cLoTemp.className = "today low-temperature";
+      cLoTemp.innerHTML = (!this.config.concise ? this.config.label_low + " " : "") + Math.round(this.weatherData.daily.data[0].temperatureMin) + "";
+      cTempContainer.appendChild(cLoTemp);
+	  
       var cTempSeparator = document.createElement("span");
       cTempSeparator.className = "today temperature-separator dimmed";
       cTempSeparator.innerHTML = " / ";
       cTempContainer.appendChild(cTempSeparator);
 
-      //low temperature
-      var cLoTemp = document.createElement("span");
-      cLoTemp.className = "today low-temperature";
-      cLoTemp.innerHTML = (!this.config.concise ? this.config.label_low + " " : "") + Math.round(this.weatherData.daily.data[0].temperatureMin) + "°";
-      cTempContainer.appendChild(cLoTemp);
+      //high temperature
+      var cHiTemp = document.createElement("span");
+      cHiTemp.className = "today high-temperature";
+      cHiTemp.innerHTML = (!this.config.concise ? this.config.label_high + " " : "") + Math.round(this.weatherData.daily.data[0].temperatureMax) + "";
+      cTempContainer.appendChild(cHiTemp);
 
       extraCurrentConditionsWrapper.appendChild(cTempContainer);
-
 
       //precipitation
       if (this.config.showPrecipitation) {        
@@ -299,11 +301,11 @@ Module.register("MMM-DarkSkyForecast", {
       summary.classList.add("summary");
 
       if (this.config.concise) {
-        summary.innerHTML = this.weatherData.hourly ? this.weatherData.hourly.summary : this.weatherData.currently.summary;
+        summary.innerHTML = this.weatherData.hourly.summary;
       } else {
-        summary.innerHTML = (this.weatherData.minutely ? this.weatherData.minutely.summary : this.weatherData.currently.summary + ".") + " " +
-          (this.weatherData.hourly ? this.weatherData.hourly.summary + " " : "") +
-          (this.weatherData.daily ? this.weatherData.daily.summary : "");
+        summary.innerHTML = this.weatherData.minutely.summary + " " +
+          this.weatherData.hourly.summary + " " +
+          this.weatherData.daily.summary;     
       }
 
       summaryWrapper.appendChild(summary);
@@ -404,7 +406,7 @@ Module.register("MMM-DarkSkyForecast", {
         //temperature
         var hItemTemp = document.createElement("span");
         hItemTemp.className = "hourly temperature small";
-        hItemTemp.innerHTML = Math.round(h.temperature) + "°";
+        hItemTemp.innerHTML = Math.round(h.temperature) + "";
         hItem.appendChild(hItemTemp);
 
 
@@ -515,25 +517,24 @@ Module.register("MMM-DarkSkyForecast", {
         var dTempContainer = document.createElement("span");
         dTempContainer.className = "daily temperature-container small";
 
-        //high temperature
-        var dHiTemp = document.createElement("span");
-        dHiTemp.className = "daily high-temperature";
-        dHiTemp.innerHTML = (!this.config.concise ? this.config.label_high + " " : "") + Math.round(d.temperatureMax) + "°";
-        dTempContainer.appendChild(dHiTemp);
-
+        //low temperature
+        var dLoTemp = document.createElement("span");
+        dLoTemp.className = "daily low-temperature";
+        dLoTemp.innerHTML = (!this.config.concise ? this.config.label_low + " " : "") + Math.round(d.temperatureMin) + "";
+        dTempContainer.appendChild(dLoTemp);
+		
         var dTempSeparator = document.createElement("span");
         dTempSeparator.className = "daily temperature-separator dimmed";
         dTempSeparator.innerHTML = " / ";
         dTempContainer.appendChild(dTempSeparator);
 
-        //low temperature
-        var dLoTemp = document.createElement("span");
-        dLoTemp.className = "daily low-temperature";
-        dLoTemp.innerHTML = (!this.config.concise ? this.config.label_low + " " : "") + Math.round(d.temperatureMin) + "°";
-        dTempContainer.appendChild(dLoTemp);
+       //high temperature
+        var dHiTemp = document.createElement("span");
+        dHiTemp.className = "daily high-temperature";
+        dHiTemp.innerHTML = (!this.config.concise ? this.config.label_high + " " : "") + Math.round(d.temperatureMax) + "";
+        dTempContainer.appendChild(dHiTemp);
 
         dItem.appendChild(dTempContainer);
-
 
         //precipitation
         if (this.config.showPrecipitation) {
@@ -633,7 +634,7 @@ Module.register("MMM-DarkSkyForecast", {
     },
     windSpeed: {
       si: "m/s",
-      ca: "km/h",
+      ca: "k/h",
       uk2: "mph",
       us: "mph"
     }
